@@ -3,7 +3,7 @@ import { ClassRoom } from '../models/ClassRoom';
 import { School } from '../models/School';
 import { SchoolViewModel, SCHOOL_CACHE_KEY } from '../SchoolViewModel';
 import { PersistenceV2 } from '@kit.ArkUI';
-
+const TAG: string = `DemoIndex`
 @Entry
 @ComponentV2
 struct Index {
@@ -16,20 +16,26 @@ struct Index {
 
   aboutToAppear(): void {
     if (this.viewModel.currentSchool.buildings.length === 0) {
-      for (let i = 0; i < 10; i++) {
-        let building: Building = new Building();
-        building.id = i +'';
-        building.name = `Building_${Math.floor(Math.random() * 900) + 100}`;
-        building.desc = `desc_${Math.floor(Math.random() * 900) + 100}`;
-        for (let j = 0; j < 10; j++) {
-          let classRoom: ClassRoom = new ClassRoom()
-          classRoom.id = j + '';
-          classRoom.name = `Class_${Math.floor(Math.random() * 900) + 100}`;
-          classRoom.desc = `desc_${Math.floor(Math.random() * 900) + 100}`;
-          building.classRooms.push(classRoom);
-        }
-        this.viewModel.currentSchool?.buildings.push(building);
+      this.initData();
+    }
+  }
+
+  async initData() {
+    for (let i = 0; i < 2; i++) {
+      console.log(TAG, `new building: ${i}`);
+      let building: Building = new Building();
+      building.id = i + '';
+      building.name = `Building_${Math.floor(Math.random() * 900) + 100}`;
+      building.desc = `desc_${Math.floor(Math.random() * 900) + 100}`;
+      for (let j = 0; j < 1000; j++) {
+        console.log(TAG, `new classRoom: ${j}`);
+        let classRoom: ClassRoom = new ClassRoom();
+        classRoom.id = j + '';
+        classRoom.name = `Class_${Math.floor(Math.random() * 900) + 100}`;
+        classRoom.desc = `desc_${Math.floor(Math.random() * 900) + 100}`;
+        building.classRooms.push(classRoom);
       }
+      this.viewModel.currentSchool?.buildings.push(building);
     }
   }
 

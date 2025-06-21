@@ -20,7 +20,9 @@ export class SchoolViewModel {
   }
 
   constructor() {
+    let start: number = Date.now();
     this.currentSchool = PersistenceV2.connect(School, SCHOOL_CACHE_KEY, ()=> new School())!;
+    console.log(`DemoIndex`, `readCache end: cost: ${Date.now() - start} ms`)
   }
 
 }
