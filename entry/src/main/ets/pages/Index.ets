@@ -6,14 +6,16 @@ import { SchoolViewModel } from '../SchoolViewModel';
 @ComponentV2
 struct Index {
   @Local message: string = 'Hello World';
-  @Local school: School = new School();
 
   @Local viewModel: SchoolViewModel = SchoolViewModel.getInstance();
 
   private controller: TabsController = new TabsController();
 
   aboutToAppear(): void {
-
+    for (let i = 0; i < 100; i++) {
+      let building: Building = new Building(i + '', `Name_${Number(Math.random().toPrecision(2)) * 100}`, `Desc_${Number(Math.random().toPrecision(2)) * 100}`);
+      this.viewModel.currentSchool.buildings.push(building);
+    }
   }
 
   build() {
@@ -21,7 +23,11 @@ struct Index {
       Tabs({
         controller: this.controller
       }) {
-
+        Repeat(this.viewModel.currentSchool.buildings).each((repeatItem) => {
+          TabContent() {
+            this.buildingContent(repeatItem);
+          }.tabBar(this.tabBar(repeatItem.item.name, Number(repeatItem.item.id)))
+        })
       }
       .barWidth('100%')
       .barHeight('30vp')
@@ -53,10 +59,17 @@ struct Index {
   }
 
   @Builder
-  buildingContent(building: Building) {
+  buildingContent(repeatItem: RepeatItem<Building>) {
     Column() {
-
+      Text(repeatItem.item.name)
+        .fontColor($r('sys.color.font_emphasize'))
+        .fontSize($r('sys.float.Caption_L'))
+      Text(repeatItem.item.desc)
+        .fontColor($r('sys.color.font_primary'))
+        .fontSize($r('sys.float.Caption_M'))
     }
+    .alignItems(HorizontalAlign.Start)
+    .justifyContent(FlexAlign.Start)
     .width('100%')
     .height('100%')
   }
