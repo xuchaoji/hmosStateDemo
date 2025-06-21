@@ -1,10 +1,14 @@
 import { School } from "./models/School";
+import { PersistenceV2, Type } from "@kit.ArkUI";
+
+export const SCHOOL_CACHE_KEY: string = 'school_cache'
 
 @ObservedV2
 export class SchoolViewModel {
   static instance: SchoolViewModel;
 
-  @Trace currentSchool: School = new School();
+  @Type(School)
+  @Trace currentSchool: School;
 
   @Trace currentBuildingIndex: number = 0;
 
@@ -16,7 +20,7 @@ export class SchoolViewModel {
   }
 
   constructor() {
+    this.currentSchool = PersistenceV2.connect(School, SCHOOL_CACHE_KEY, ()=> new School())!;
   }
-
 
 }
